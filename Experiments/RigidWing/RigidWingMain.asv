@@ -1,0 +1,29 @@
+addpath(genpath("C:\Users\wolfi\OneDrive\Documents\Membrane flapper project"))
+
+N = 64;
+Ae = 1;
+R = 1;
+sigma = 1;
+lambda_0 = 1.1;
+amp = 1;
+U = 1;
+k_edge = 1;
+
+H_m = 2;
+alpha = 0;
+y_target_diff = H_m * sin(alpha);
+
+y_targets = zeros(N+1,1);
+x = cos(pi*(0:N)/N); % Should never change...
+
+
+params = {"N", N;
+          "Ae",Ae;
+          "R" , R;
+          "sigma",sigma;
+          "lambda_0",lambda_0;
+          "amp",amp;
+          "U",U;
+          "k_edge",k_edge;
+          "y_targets",y_targets;
+          "x",x};

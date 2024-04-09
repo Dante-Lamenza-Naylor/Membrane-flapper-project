@@ -1,0 +1,26 @@
+function fluid_load = SpectralFluidModel1(x,dydt,dydt2,dydx,dydx2,params)
+    % All inputs should be column vectors (save params)
+    % Process detailed by Moore 2017
+
+    % x needs to be Chebyshev Gauss Lobatto
+    % x = cos(pi*(0:N)/N)
+
+    U = params{7,2};
+    sigma = params{4,2};
+    N = params{1,2};
+
+    dpsi = -1 * (dydt2 + U^2 * dydx2);
+    dpsi_coeffs = GetChebyCoeffs(dpsi);
+    aks = GetChebyAntiDerCoeffs(dpsi_coeffs,0,1); % Constant is 0 here
+    aks = aks(1:end-1); % Remove extra coeffecient at end
+
+    V = dydt + U*dydx;
+    V_coeffs = GetChebyCoeffs(V);
+    aks(1) = -1 * U * Theodorsen(sigma) * (V_coeffs(1) + V_coeffs(2)) ...
+            + U * V_coeffs(2);
+
+    Qs = aks(1) * sqrt ((1-x)./(1+x));
+    Qs(end) = 0; % removes singularity
+    Qr = 2*sum(aks(2:end).*sin((pi*(1:N).*(1:N)')/N))';
+
+    fluid_load = 0*Qs + [Qr;0];

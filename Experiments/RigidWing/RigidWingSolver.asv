@@ -1,0 +1,39 @@
+function y_return = RigidWingSolver(sol_vector,t_given,dydt,basket,params)
+    
+    % !!! Figure out indices here !!!
+    sigma = params;
+    R = params;
+    amp = params;
+    x = params;
+
+    basket.M_update_time(t_given)
+    STM_size = basket.STM_size;
+
+    N = length(sol_vector) - 1;
+
+    % !!! Check these !!!
+    y = sol_vector(1:N+1);
+    dydt = sol_vector(N+2:end);
+
+    y_target_heave = amp * sin(sigma * t_given);
+    % !!! Figure out indices here !!!
+    y_targets = param + y_target_heave;
+
+    [dydx,dydx2,adydx] = ChebyCalculus(y);
+
+    struct_force = RigidWingModel(y,y_targets,params);
+    dydt2 = struct_force ./ (4*R);
+
+    fluid_load = SpectralFluidModel1(x,dydt,dydt2,dydx,dydx2,params);
+
+    sol_vector = [dydt;dydt2];
+
+    basket.STM_save(2,y);
+    basket.STM_save(3,dydt);
+    basket.STM_save(4,dydt2);
+    basket.STM_save(5,struct_force);
+    basket.STM_save(6,fluid_load);
+
+
+
+    

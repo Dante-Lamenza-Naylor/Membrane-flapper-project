@@ -1,0 +1,5 @@
+- time step seems to have little effect on convergence.
+
+- grid resolution has noticeable effect. 
+- Error due to singular term increases with increasing grid resolution (getting closer to singularity, something to do with numerical instability at large numbers?)
+- Error due to nonsingular term decreases with increasing grid resolution (accuracy of inverse transform for load increases with increase of summands).
