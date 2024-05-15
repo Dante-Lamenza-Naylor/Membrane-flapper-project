@@ -3,10 +3,10 @@
 N = 64;
 Ae = 1;
 R = 1;
+U = 1;
 sigma = 2*pi/U;
 lambda_0 = 1.1;
 amp = 1;
-U = 1;
 k_edge = 1;
 
 y_targets = zeros(N+1,1);

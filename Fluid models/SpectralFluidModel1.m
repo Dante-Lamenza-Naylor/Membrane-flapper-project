@@ -23,4 +23,4 @@ function fluid_load = SpectralFluidModel1(x,dydt,dydt2,dydx,dydx2,params)
     Qs(end) = 0; % removes singularity
     Qr = 2*sum(aks(2:end).*sin((pi*(1:N).*(1:N)')/N))';
 
-    fluid_load = 0*Qs + [Qr;0];
+    fluid_load = Qs + [Qr;0];

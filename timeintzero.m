@@ -17,5 +17,5 @@ function yout = timeintzero(F,t0,h,tfinal,y0)
      s4 = F(t+h, y+h*s3);
      y = y + h*(s1 + 2*s2 + 2*s3 + s4)/6;
      yout = [yout; y]; %#ok<AGROW>
-     disp(t)
+     disp(t/tfinal * 100)
   end
