@@ -19,25 +19,30 @@ function sol_return = HeaveVacuumSolver(t_given,sol_vector,basket,params)
     y([1,end]) = y_targets([1,end]);
 
     % Do some derivatives with smoothing thrown in
-    peak_threshold = 2;
-    freq_threshold = 2;
+    peak_threshold = 0.1;
+    freq_threshold = 0.9;
     smooths = 0;
     while 1
-        [dydx,dydx2,adydx] = ChebyCalculus(y);
+        % [dydx,dydx2,adydx] = ChebyCalculus(y); UNSTABLE D:
+
+        dydx = gradient(y)./gradient(x);
+        dydx2 = gradient(dydx)./gradient(x);  % STABLE :D
+
         % Enforce edges
         dydx([1,end]) = 0;
         dydx2([1,end]) = 0;
 
         % Check smoothness
-        [smooth,fft_xs,fft_ys] = CheckSmoothness(x,dydx2,peak_threshold,freq_threshold); 
+        [smooth,fft_xs,fft_ys] = CheckSmoothness(x,y,peak_threshold,freq_threshold); 
         if ~smooth
             smooths = smooths + 1;
-            y = GaussSmooth(y,0.05);
-            disp(['smooths: ',num2str(smooths)])
+            y = GaussSmooth(y,5);
+            y([1,end]) = y_targets([1,end]);
         else
             break
         end
     end
+    % disp(['smooths: ',num2str(smooths)])
 
     % ~~~~~~~~ SWAP WING MODELS HERE ~~~~~~~~~~~~~~~~~~~~~~
     struct_force = HyperWingModel(y,y_targets,dydx,dydx2,params);

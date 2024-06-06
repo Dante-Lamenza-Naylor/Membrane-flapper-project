@@ -6,7 +6,7 @@ R = 1;
 U = 1;
 sigma = 2*pi/U;
 lambda_0 = 1.1;
-amp = 1e-2;
+amp = 1;
 k_edge = 1;
 
 x = flip(cos(pi*(0:N)/N)'); % Should never change...
@@ -21,40 +21,36 @@ natfreq_lin = sqrt(b/a)/(2*H_m);
 natper_lin  = 1/natfreq_lin;
 
 %% Nonlinear limit
-amps = logspace(-10,0,50);
-errors = zeros(length(amps),1);
-for i = 1:length(amps)
-    amp = amps(i);
-    params = {"N", N;                % 1
-              "Ae",Ae;               % 2
-              "R" , R;               % 3
-              "sigma",sigma;         % 4
-              "lambda_0",lambda_0;   % 5
-              "amp",amp;             % 6
-              "U",U;                 % 7
-              "k_edge",k_edge;       % 8
-              "y_targets",y_targets; % 9
-              "x",x};                % 10
-    
-    tmax = natper_lin/2;
-    dt = 1e-2;
-    t0 = 0;
-    
-    basket_a = solver_basket(dt);
-    basket_a.SetUpMemory(dt,dt,tmax,8);
-    
-    outs = timeintzero(@(t,y)StillVacuumSolver(t,y,basket_a,params),t0,dt,tmax,[y_targets ; dydt0]);
-    
-    % Analytical comparison
-    t_sol           = cell2mat(basket_a.LTM(1,:));
-    y_sol           = cell2mat(basket_a.LTM(2,:));
-    lin_sol = amp * cos(sqrt(b/a) * pi * t_sol(1:end-1)/H_m).*sin(pi*(x-1)/2);
-    
-    errors(i) = max(abs(y_sol - lin_sol),[],'all');
-end
+params = {"N", N;                % 1
+          "Ae",Ae;               % 2
+          "R" , R;               % 3
+          "sigma",sigma;         % 4
+          "lambda_0",lambda_0;   % 5
+          "amp",amp;             % 6
+          "U",U;                 % 7
+          "k_edge",k_edge;       % 8
+          "y_targets",y_targets; % 9
+          "x",x};                % 10
+
+tmax = natper_lin/2;
+dt = 1e-3;
+t0 = 0;
+
+basket_a = solver_basket(dt);
+basket_a.SetUpMemory(1e-4,1e-3,tmax,9);
+
+
+outs = timeintzero(@(t,y)StillVacuumSolver(t,y,basket_a,params),t0,dt,tmax,[y_targets ; dydt0]);
+
+% Analytical comparison
+t_sol           = cell2mat(basket_a.LTM(1,:));
+y_sol           = cell2mat(basket_a.LTM(2,:));
+lin_sol = amp * cos(sqrt(b/a) * pi * t_sol(1:end-1)/H_m).*sin(pi*(x-1)/2);
+
+error = max(abs(y_sol - lin_sol),[],'all');
 %%
 loglog(amps,errors,'o')
 xlabel("Initial amplitude $a$",'interpreter','latex')
 ylabel("Max error",'interpreter','latex')
 %%
-%StillVacuumViz(basket_a,params,1,"Damping_0.01")
+StillVacuumViz(basket_a,params,1,"test3")

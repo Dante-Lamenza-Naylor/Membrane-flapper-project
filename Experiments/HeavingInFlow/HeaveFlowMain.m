@@ -1,15 +1,15 @@
 % Note to self: addpath function takes a lot of compute time...
 
 N = 64;
-Ae = 1;
-R = 1;
-lambda_0 = 1.1;
+Ae = 60;
+R = 4;
+lambda_0 = 1.05;
 
 nat_freq_est = (pi/sqrt(8))*sqrt(Ae*(lambda_0-1)/(R+0.5)); % From Gali
 
-U = 1;
-freq = 0.05;
-sigma = 2*pi/U * freq;
+sigma = 1;
+freq = 1;
+U = 2*pi*freq/sigma;
 
 amp = 1;
 k_edge = 1;
@@ -30,7 +30,7 @@ params = {"N", N;                % 1
           "x",x};                % 10
 
 
-tmax = 30;
+tmax = 5;
 dt = 1e-3;
 t0 = 0;
 

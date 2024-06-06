@@ -30,7 +30,7 @@ params = {"N", N;                % 1
 
 
 tmax = 20;
-dt = 1e-2;
+dt = 1e-3;
 t0 = 0;
 
 basket_a = solver_basket(dt);

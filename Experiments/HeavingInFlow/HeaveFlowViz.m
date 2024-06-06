@@ -74,8 +74,8 @@ for j = 2:length(y_sol)
         ylabel(ax1,'y/H_m');
 
         axis(ax1,[-1.1 1.1 -2 2]);
-        axis(ax2,[-1.1 1.1 -50 50]);
-        axis(ax3,[-1.1 1.1 -50 50]);
+        % axis(ax2,[-1.1 1.1 -50 50]);
+        % axis(ax3,[-1.1 1.1 -50 50]);
 
 
         title(ax1,"wing");

@@ -40,12 +40,14 @@ function sol_return = HeaveFlowSolver(t_given,sol_vector,basket,params)
     end
 
     % ~~~~~~~~ SWAP WING MODELS HERE ~~~~~~~~~~~~~~~~~~~~~~
-    struct_force = HyperWingModel(y,y_targets,dydx,dydx2,params);
+    struct_force = LinearWingModel(y,y_targets,dydx,dydx2,params);
     % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     dydt2 = struct_force ./ (4*R) - 0.1*dydt;
 
     fluid_load = real(SpectralFluidModel1(flip(x),dydt,dydt2,dydx,dydx2,params));
+
+    dydt2 = (struct_force - fluid_load) ./ (4*R);
 
     sol_return = [dydt;dydt2];
 

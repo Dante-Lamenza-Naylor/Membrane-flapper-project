@@ -17,6 +17,7 @@ tension_sol     = basket.LTM(5,:);
 dydx2_sol        = basket.LTM(6,:);
 fft_xs_sol       = basket.LTM(7,:);
 fft_ys_sol      = basket.LTM(8,:);
+dydx_sol        = basket.LTM(9,:);
 
 
 % Avoid issue of empty cells
@@ -36,7 +37,7 @@ v.FrameRate = 30;
 v.Quality = 100;
 % v.LosslessCompression = true;
 open(v);
-skip = 20;
+skip = 100;
 skipcount = 0;
 
 % Run video
@@ -52,6 +53,7 @@ for j = 2:length(y_sol)
         dydx2   = dydx2_sol{j};
         fft_xs  = fft_xs_sol{j};
         fft_ys  = fft_ys_sol{j};
+        dydx    = dydx_sol{j};
          
         %Membrane
         plot(ax1,xs,memys,'o-black','LineWidth',2,'MarkerSize',5);
@@ -64,7 +66,7 @@ for j = 2:length(y_sol)
         hold(ax2,'off')
 
         % dydx2
-        plot(ax3,fft_xs,fft_ys,'.-');
+        plot(ax3,xs,dydx,'.-');
         hold(ax3,'on')
         hold(ax3,'off')
 
@@ -72,17 +74,17 @@ for j = 2:length(y_sol)
         ylabel(ax1,'y/H_m');
 
         axis(ax1,[-1.1 1.1 -1.1 1.1]);
-        axis(ax2,[-1.1 1.1 -10 10]);
-        axis(ax3,[fft_xs(1) fft_xs(end) 0 1]);
+        axis(ax2,[-1.1 1.1 -30 30]);
+        axis(ax3,[-1.1 1.1 -2.5 2.5]);
 
 
         title(ax1,"wing");
         title(ax2,"dydx2");
-        title(ax3,"fft");
+        title(ax3,"dydx");
 
 
-        % txt = text(0.1, -0.025, 'Initial Value');
-        % set(txt, 'String', num2str(basket.LTM{1,j}))
+        txt = text(ax2,0.1, -5, 'Initial Value');
+        set(txt, 'String', num2str(basket.LTM{1,j}))
         % 
         % txt = text(0.1, -0.07, 'Initial Value');
         % set(txt, 'String', num2str(basket.LTM{5,j}))

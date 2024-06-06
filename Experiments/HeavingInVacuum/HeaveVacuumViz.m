@@ -36,7 +36,7 @@ v.FrameRate = 30;
 v.Quality = 100;
 % v.LosslessCompression = true;
 open(v);
-skip = 20;
+skip = 1;
 skipcount = 0;
 
 % Run video
